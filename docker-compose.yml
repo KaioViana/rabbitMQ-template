@@ -1,0 +1,20 @@
+version: "3.1"
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq-template
+    restart: always
+    ports:
+      - 5672:5672
+      - 15672:15672
+    volumes:
+      - ./data:/var/lib/rabbitmq/
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER_DEV}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASS_DEV}
+    networks:
+      - rabbitmq_nodejs
+networks:
+  rabbitmq_nodejs:
+    driver: bridge
