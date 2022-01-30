@@ -1,6 +1,5 @@
 import amqp from 'amqplib/callback_api.js';
 
-
 amqp.connect('amqp://admin:123456@localhost:5672', (error0, connection) => {
   if(error0) {
     throw error0
