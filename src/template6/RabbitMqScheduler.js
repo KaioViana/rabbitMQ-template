@@ -16,16 +16,7 @@ class RabbitMqScheduler {
 
   async handleScheduleMessage(queue, exchange, routingKey) {
     try {
-      const { consumerCount } = await this.channel.checkQueue(queue);
-      console.log('ConsumerCount:', consumerCount);
-
-      if(consumerCount >= 1) {
-        setTimeout(() => {
-          console.log('this queue already have an consumer');
-          process.exit(0);
-        }, 500);
-        return;
-      }
+    
       await this.channel.assertExchange(exchange, 'x-delayed-message', {
         autoDelete: false,
         durable: true,
@@ -35,7 +26,16 @@ class RabbitMqScheduler {
         }
       });
 
-      const q = await this.channel.assertQueue(queue, { durable: true});
+      const q = await this.channel.assertQueue(queue, { durable: true });
+
+      if(q.consumerCount === 1) {
+        setTimeout(() => {
+          console.log('this queue already has an consumer!')
+          this.conn.close();
+          process.exit(0);
+        }, 500);
+      }
+
       await this.channel.bindQueue(q.queue, exchange, routingKey);
 
       await this.channel.prefetch(1);

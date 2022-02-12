@@ -6,7 +6,7 @@ function run() {
   const QUEUE_NAME = 'incorporadora_1';
   const EXCHANGE = 'schedule_exchange';
   const ROUTING_KEY = 'incorporadora_1.email'
-  const DELAY = 10000;
+  const DELAY = 5000;
   const MSG = {
     index: 1,
     content: 'CONTENT_TEST',
